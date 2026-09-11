@@ -116,7 +116,7 @@ const initialUsers = [
   },
   {
     _id: '66d8e0010000000000000005',
-    name: 'Ananya Sharma',
+    name: 'Sonu Pal',
     email: 'consumer@gmail.com',
     password: '',
     phone: '+91 9811223344',
@@ -598,7 +598,7 @@ const initialOrders = [
     _id: '66d8e2010000000000000021',
     orderNumber: 'ORD-2026-9041',
     consumer: '66d8e0010000000000000005',
-    consumerName: 'Ananya Sharma',
+    consumerName: 'Sonu Pal',
     consumerPhone: '+91 9811223344',
     items: [
       {
@@ -654,7 +654,7 @@ const initialReviews = [
     _id: '66d8e3010000000000000031',
     product: '66d8e1010000000000000011',
     consumer: '66d8e0010000000000000005',
-    consumerName: 'Ananya Sharma',
+    consumerName: 'Sonu Pal',
     farmer: '66d8e0010000000000000002',
     rating: 5,
     comment: 'The mangoes were divine! Incredible aroma and no artificial ripening taste whatsoever. Buying again for my parents!',

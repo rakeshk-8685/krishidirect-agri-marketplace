@@ -809,7 +809,7 @@ export default function Login() {
             <div className="space-y-2">
               {[
                 {
-                  name: 'Ananya Sharma',
+                  name: 'Sonu Pal',
                   email: 'consumer@gmail.com',
                   role: 'consumer',
                   avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',

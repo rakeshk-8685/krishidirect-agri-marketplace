@@ -168,7 +168,7 @@ export default function Checkout() {
                   required
                   value={recipientName}
                   onChange={(e) => setRecipientName(e.target.value)}
-                  placeholder="e.g. Ananya Sharma"
+                  placeholder="e.g. Sonu Pal"
                   className="w-full p-3 rounded-xl border border-slate-200 font-medium text-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                 />
               </div>

@@ -27,7 +27,7 @@ async function runTests() {
 
   try {
     // 1. Login as Consumer (Non-admin)
-    console.log('\n[1] Logging in as Consumer (Ananya Sharma)...');
+    console.log('\n[1] Logging in as Consumer (Sonu Pal)...');
     const consumerLogin = await request({
       hostname: 'localhost',
       port: 5000,

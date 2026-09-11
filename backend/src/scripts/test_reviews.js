@@ -26,8 +26,8 @@ async function runTests() {
   console.log('--- STARTING MARKETPLACE TRUST SYSTEM TESTS ---');
 
   try {
-    // 1. Login as Consumer (Ananya Sharma)
-    console.log('\n[1] Logging in as Consumer (Ananya Sharma)...');
+    // 1. Login as Consumer (Sonu Pal)
+    console.log('\n[1] Logging in as Consumer (Sonu Pal)...');
     const loginRes = await request({
       hostname: 'localhost',
       port: 5000,
@@ -92,7 +92,7 @@ async function runTests() {
     }
 
     // 5. Test Eligibility Check for Verified Consumer
-    console.log('\n[5] Checking eligibility for Consumer Ananya...');
+    console.log('\n[5] Checking eligibility for Consumer Sonu Pal...');
     const eligibilityRes = await request({
       hostname: 'localhost',
       port: 5000,
