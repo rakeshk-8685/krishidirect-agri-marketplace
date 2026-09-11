@@ -49,7 +49,13 @@ app.use(cors({
       if (isLocalhost) return callback(null, true);
     }
 
-    if (allowedOrigins.includes(origin)) {
+    if (allowedOrigins.includes(origin) || allowedOrigins.includes(origin.replace(/^https?:\/\//, ''))) {
+      return callback(null, true);
+    }
+
+    // Automatically permit Render domains (*.onrender.com)
+    const hostname = origin.replace(/^https?:\/\//, '').split(':')[0];
+    if (hostname.endsWith('.onrender.com')) {
       return callback(null, true);
     }
 

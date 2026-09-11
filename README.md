@@ -9,6 +9,7 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![JWT](https://img.shields.io/badge/JWT-Secure%20Auth-black?style=for-the-badge&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Render](https://img.shields.io/badge/Render-Deploy_Ready-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://render.com/)
 
 **KrishiDirect** is a modern, production-grade full-stack agricultural marketplace platform built to dismantle exploitative middleman chains by directly connecting verified regional farmers with urban consumers. It delivers farm-gate price realization for rural growers, authentic pesticide-free produce traceability for households, and an end-to-end digital farm trading ecosystem.
 
@@ -204,6 +205,21 @@ Verify frontend production bundle compilation:
 ```bash
 npm run build
 ```
+
+---
+
+## 🌐 Live Deployment on Render (Blueprint)
+
+This repository includes a native [`render.yaml`](file:///d:/Agri%20Marketplace/render.yaml) Blueprint that automatically provisions:
+1. **Backend Web Service (`krishidirect-api`)**: Node.js Express server connected to MongoDB Atlas with auto-generated JWT secrets and health monitoring.
+2. **Frontend Static Site (`krishidirect-web`)**: React + Vite SPA with URL rewrites (`/* -> /index.html`) and automatic environment binding to the backend API service.
+
+### Deploy Steps:
+1. Log into your [Render Dashboard](https://dashboard.render.com/).
+2. Click **New +** → **Blueprint**.
+3. Connect your GitHub repository: `rakeshk-8685/krishidirect-agri-marketplace`.
+4. Render will detect [`render.yaml`](file:///d:/Agri%20Marketplace/render.yaml) and automatically configure both services.
+5. Click **Apply** to launch both your frontend and backend live!
 
 ---
 

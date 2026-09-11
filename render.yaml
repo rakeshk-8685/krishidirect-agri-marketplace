@@ -1,0 +1,46 @@
+services:
+  # ---------------------------------------------------
+  # KrishiDirect Express + Node.js API Service
+  # ---------------------------------------------------
+  - type: web
+    name: krishidirect-api
+    env: node
+    plan: free
+    buildCommand: npm --prefix backend install
+    startCommand: npm --prefix backend start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGODB_URI
+        value: mongodb+srv://rakeshkr8685_db_user:EVcj5CVYH63K1SnS@cluster0.y6vzvyo.mongodb.net/agri_marketplace?retryWrites=true&w=majority
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: FRONTEND_ORIGIN
+        fromService:
+          type: web
+          name: krishidirect-web
+          property: host
+
+  # ---------------------------------------------------
+  # KrishiDirect React + Vite SPA Static Web Site
+  # ---------------------------------------------------
+  - type: web
+    name: krishidirect-web
+    env: static
+    buildCommand: npm --prefix frontend install && npm --prefix frontend run build
+    staticPublishPath: ./frontend/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: krishidirect-api
+          property: host

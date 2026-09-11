@@ -1,4 +1,8 @@
-const API_BASE_URL = '/api';
+const rawApiUrl = import.meta.env.VITE_API_URL;
+const formattedBase = rawApiUrl
+  ? (rawApiUrl.startsWith('http') ? rawApiUrl : `https://${rawApiUrl}`)
+  : '';
+const API_BASE_URL = formattedBase ? `${formattedBase.replace(/\/+$/, '')}/api` : '/api';
 
 const getHeaders = () => {
   const token = localStorage.getItem('agri_token');
