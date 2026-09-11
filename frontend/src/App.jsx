@@ -6,6 +6,7 @@ import { NotificationProvider } from './context/NotificationContext';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import MobileBottomNav from './components/MobileBottomNav';
 import ProtectedRoute from './components/ProtectedRoute';
 import LoadingSpinner from './components/LoadingSpinner';
 
@@ -52,7 +53,7 @@ function AppContent() {
   return (
     <div className="min-h-screen flex flex-col bg-agri-cream text-agri-slate">
       <Navbar />
-      <main className="flex-grow">
+      <main className="flex-grow pb-16 md:pb-0">
         <Suspense fallback={<PageLoader />}>
           <Routes>
             {/* Public Consumer Routes */}
@@ -131,6 +132,7 @@ function AppContent() {
         </Suspense>
       </main>
       {!isAuthPage && <Footer />}
+      {!isAuthPage && <MobileBottomNav />}
     </div>
   );
 }

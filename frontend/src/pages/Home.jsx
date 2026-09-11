@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { apiCall } from '../services/api';
+import { useCart } from '../context/CartContext';
 import ProductCard from '../components/ProductCard';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { Tractor, Search, ArrowRight, ShieldCheck, HeartHandshake, Sparkles, Leaf, TrendingUp, CheckCircle, Truck, Award, QrCode, Star, ChevronRight, MapPin, ChevronDown, ChevronUp, BarChart2, Newspaper, PhoneCall, X } from 'lucide-react';
+import { Tractor, Search, ArrowRight, ShieldCheck, HeartHandshake, Sparkles, Leaf, TrendingUp, CheckCircle, Truck, Award, QrCode, Star, ChevronRight, MapPin, ChevronDown, ChevronUp, BarChart2, Newspaper, PhoneCall, X, Carrot, Apple, Milk, Wheat, Sprout, Landmark, Radio, Plus, Heart, ShoppingBag } from 'lucide-react';
 
 // Live mandi ticker items (scrolling)
 const TICKER_ITEMS = [
@@ -52,6 +53,7 @@ export default function Home() {
   const [showAllHarvests, setShowAllHarvests] = useState(false);
   const navigate = useNavigate();
   const tickerRef = useRef(null);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -367,6 +369,373 @@ export default function Home() {
 
   return (
     <div className="space-y-0 bg-slate-50/50">
+
+      {/* ====================== MOBILE STITCH VIEW (Phone < 768px) ====================== */}
+      <div className="md:hidden pb-12 bg-white text-slate-900">
+
+        {/* 1. Mobile Top Search Bar & Popular Tags Row */}
+        <div className="bg-white px-4 pt-3 pb-2 border-b border-slate-100">
+          <form
+            onSubmit={handleSearchSubmit}
+            className="relative flex items-center bg-white border border-slate-200 rounded-full shadow-xs px-3 py-1.5 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-emerald-500"
+          >
+            <Search className="w-4 h-4 text-slate-400 shrink-0 mr-2" />
+            <input
+              type="text"
+              placeholder="Search crop, spice, or variety..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-transparent text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none"
+            />
+            <div className="shrink-0 flex items-center gap-1 pl-2 border-l border-slate-200 ml-1">
+              <MapPin className="w-3 h-3 text-emerald-600 shrink-0" />
+              <select
+                value={selectedState}
+                onChange={(e) => setSelectedState(e.target.value)}
+                className="bg-transparent text-[11px] font-semibold text-slate-700 focus:outline-none cursor-pointer pr-1 max-w-[85px] truncate"
+              >
+                {INDIA_STATES.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <button
+              type="submit"
+              className="shrink-0 ml-1.5 w-7 h-7 rounded-full bg-amber-500 hover:bg-amber-600 text-slate-950 flex items-center justify-center shadow-xs cursor-pointer active:scale-95 transition-transform"
+              aria-label="Search"
+            >
+              <Search className="w-3.5 h-3.5 stroke-[2.5]" />
+            </button>
+          </form>
+
+          {/* Popular tags row */}
+          <div className="flex items-center gap-1.5 mt-2.5 overflow-x-auto no-scrollbar pb-1 text-xs">
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 shrink-0 mr-1">
+              POPULAR:
+            </span>
+            {[
+              { name: 'Alphonso Mango', active: true },
+              { name: 'Desi Tomato', active: false },
+              { name: 'Nashik Onion', active: false },
+              { name: 'Sharbati Wheat', active: false },
+              { name: 'Guntur Chilli', active: false },
+              { name: 'Kashmiri Apple', active: false },
+            ].map((tag) => (
+              <button
+                key={tag.name}
+                type="button"
+                onClick={() => {
+                  setSearchQuery(tag.name);
+                  navigate(`/marketplace?search=${encodeURIComponent(tag.name)}`);
+                }}
+                className={`shrink-0 px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                  tag.active
+                    ? 'bg-[#104b2b] text-white shadow-xs'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                }`}
+              >
+                {tag.name}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 2. Mobile Hero Card */}
+        <div className="px-4 pt-3 pb-1">
+          <div className="relative overflow-hidden rounded-[24px] bg-gradient-to-br from-[#124d2c] via-[#0d3f23] to-[#072614] text-white p-5 shadow-lg">
+            {/* Ambient glows */}
+            <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-emerald-500/10 pointer-events-none blur-xl" />
+            <div className="absolute -bottom-10 -left-10 w-40 h-40 rounded-full bg-amber-500/10 pointer-events-none blur-xl" />
+
+            {/* Top Pill Tag */}
+            <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-[10px] font-extrabold tracking-wide text-emerald-300 mb-3 shadow-inner">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              DIRECT FARM TO CONSUMER
+            </div>
+
+            {/* Headline */}
+            <h2 className="text-2xl font-black tracking-tight leading-tight mb-2">
+              India's <span className="text-[#6ee7b7]">No.1 Agro</span> Marketplace
+            </h2>
+
+            {/* Subtitle */}
+            <p className="text-xs text-emerald-100/85 leading-relaxed mb-5 font-medium">
+              Buy & sell farm produce, grains, and spices directly with zero broker commissions.
+            </p>
+
+            {/* 2x2 Trust Grid */}
+            <div className="grid grid-cols-2 gap-2.5 pt-1 border-t border-emerald-800/60">
+              <div className="flex items-center gap-2 bg-white/5 backdrop-blur-xs rounded-xl p-2 border border-white/10">
+                <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                <div>
+                  <div className="text-xs font-bold leading-tight text-white">Verified Farmers</div>
+                  <div className="text-[10px] text-emerald-200/75 leading-tight">KYC Authenticated</div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 bg-white/5 backdrop-blur-xs rounded-xl p-2 border border-white/10">
+                <TrendingUp className="w-4 h-4 text-amber-400 shrink-0" />
+                <div>
+                  <div className="text-xs font-bold leading-tight text-white">0% Commission</div>
+                  <div className="text-[10px] text-emerald-200/75 leading-tight">Direct Mandi Price</div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 bg-white/5 backdrop-blur-xs rounded-xl p-2 border border-white/10">
+                <Truck className="w-4 h-4 text-sky-400 shrink-0" />
+                <div>
+                  <div className="text-xs font-bold leading-tight text-white">28+ States</div>
+                  <div className="text-[10px] text-emerald-200/75 leading-tight">Pan-India Express</div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 bg-white/5 backdrop-blur-xs rounded-xl p-2 border border-white/10">
+                <Award className="w-4 h-4 text-emerald-400 shrink-0" />
+                <div>
+                  <div className="text-xs font-bold leading-tight text-white">FSSAI Certified</div>
+                  <div className="text-[10px] text-emerald-200/75 leading-tight">& NPOP Organic</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 3. APMC Live Mandi Rates Section */}
+        <div className="px-4 pt-5 pb-2">
+          <div className="flex items-center justify-between mb-2.5">
+            <div className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-slate-800">
+              <Radio className="w-3.5 h-3.5 text-rose-500 animate-pulse" />
+              <span>APMC Live Mandi Rates</span>
+            </div>
+            <Link
+              to="/mandi-rates"
+              className="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-0.5"
+            >
+              View All Mandis <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          <div className="flex items-center gap-3 overflow-x-auto no-scrollbar pb-1">
+            {[
+              { location: 'Nashik, MH', change: '+3%', name: 'Onion (Red)', price: '₹1,200', unit: '/Qtl', positive: true },
+              { location: 'Sehore, MP', change: '0%', name: 'Wheat (Sharbati)', price: '₹2,200', unit: '/Qtl', positive: null },
+              { location: 'Karnal, HR', change: '+5%', name: 'Basmati 1121', price: '₹4,100', unit: '/Qtl', positive: true },
+              { location: 'Guntur, AP', change: '+8%', name: 'Chilli (Teja)', price: '₹9,800', unit: '/Qtl', positive: true },
+              { location: 'Shimla, HP', change: '+4%', name: 'Royal Apple', price: '₹6,500', unit: '/Qtl', positive: true },
+            ].map((mandi, idx) => (
+              <div
+                key={idx}
+                className="min-w-[145px] shrink-0 bg-slate-50/80 border border-slate-200/80 rounded-2xl p-3 shadow-2xs hover:shadow-xs transition-shadow"
+              >
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-[11px] font-semibold text-slate-500">{mandi.location}</span>
+                  <span className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded-full ${
+                    mandi.positive === true
+                      ? 'bg-emerald-100 text-emerald-700'
+                      : mandi.positive === false
+                      ? 'bg-rose-100 text-rose-700'
+                      : 'bg-slate-200 text-slate-600'
+                  }`}>
+                    {mandi.change}
+                  </span>
+                </div>
+                <div className="text-xs font-bold text-slate-900 truncate mb-1">{mandi.name}</div>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-sm font-black text-emerald-800">{mandi.price}</span>
+                  <span className="text-[10px] text-slate-500 font-medium">{mandi.unit}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 4. Market Categories (8 Departments) */}
+        <div className="px-4 pt-5 pb-2">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-base font-extrabold text-slate-900">Market Categories</h3>
+            <span className="text-xs font-bold text-slate-400">8 Departments</span>
+          </div>
+
+          <div className="grid grid-cols-4 gap-2.5">
+            {[
+              { title: 'Fresh Veggies', icon: Carrot, color: 'text-emerald-700 bg-emerald-50', link: '/marketplace?category=Vegetables' },
+              { title: 'Orchard Fruits', icon: Apple, color: 'text-amber-700 bg-amber-50', link: '/marketplace?category=Fruits' },
+              { title: 'Dairy & Honey', icon: Milk, color: 'text-sky-700 bg-sky-50', link: '/marketplace?category=Dairy %26 Poultry' },
+              { title: '100% Organic', icon: Leaf, color: 'text-emerald-800 bg-emerald-100', link: '/marketplace?isOrganic=true' },
+              { title: 'Grains & Pulses', icon: Wheat, color: 'text-amber-800 bg-amber-100', link: '/marketplace?category=Grains %26 Pulses' },
+              { title: 'Seeds & Bio', icon: Sprout, color: 'text-teal-700 bg-teal-50', link: '/marketplace?category=Seeds %26 Fertilizer' },
+              { title: 'Verified Farms', icon: Tractor, color: 'text-green-700 bg-green-50', link: '/marketplace' },
+              { title: 'Govt Schemes', icon: Landmark, color: 'text-indigo-700 bg-indigo-50', link: '/marketplace' },
+            ].map((dept, idx) => {
+              const Icon = dept.icon;
+              return (
+                <Link
+                  key={idx}
+                  to={dept.link}
+                  className="flex flex-col items-center justify-center p-2.5 rounded-2xl bg-slate-50/70 border border-slate-100 hover:border-emerald-200 transition-all text-center group cursor-pointer active:scale-95 shadow-2xs"
+                >
+                  <div className={`w-11 h-11 rounded-2xl flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform ${dept.color}`}>
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <span className="text-[11px] font-bold text-slate-800 leading-tight">
+                    {dept.title}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 5. Direct From Verified Farmers Produce Feed */}
+        <div className="px-4 pt-5 pb-3">
+          <div className="flex items-end justify-between mb-3.5">
+            <div>
+              <h3 className="text-base font-extrabold text-slate-900 leading-tight">
+                Direct From Verified Farmers
+              </h3>
+              <p className="text-[11px] text-slate-500 font-medium mt-0.5">
+                Harvested this morning • Zero middleman markups
+              </p>
+            </div>
+            <span className="text-[11px] font-bold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-full shrink-0">
+              {products.length ? `${products.length * 28}+ Lots` : '340+ Lots'}
+            </span>
+          </div>
+
+          <div className="space-y-3">
+            {(products.length > 0 ? products : [
+              {
+                _id: 'sample-1',
+                title: 'Original Alphonso Mango (Hapus)',
+                description: 'Naturally ripened, export grade, sweet pulp',
+                price: 749,
+                originalPrice: 960,
+                unit: 'Dozen',
+                category: 'Fruits',
+                farmer: { name: 'R. Patil Farms', location: 'Ratnagiri, MH' },
+                grade: 'Grade A+',
+                badge: 'GI TAGGED',
+                images: ['https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=400&q=80'],
+              },
+              {
+                _id: 'sample-2',
+                title: 'Sharbati Golden Whole Wheat',
+                description: 'Sehore certified, heavy grains, high protein',
+                price: 52,
+                originalPrice: 65,
+                unit: 'Kg',
+                category: 'Grains & Pulses',
+                farmer: { name: 'Verma Krishi Farm', location: 'Sehore, MP' },
+                grade: 'Grade A',
+                badge: 'DIRECT APMC',
+                images: ['https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=400&q=80'],
+              },
+              {
+                _id: 'sample-3',
+                title: 'Pure Wild Forest Raw Honey',
+                description: 'Unheated, raw filtered, indigenous bee hives',
+                price: 480,
+                originalPrice: 590,
+                unit: '500g',
+                category: 'Organic & Special',
+                farmer: { name: 'Wayanad Forest Co-op', location: 'Wayanad, KL' },
+                grade: '100% Pure',
+                badge: 'ORGANIC',
+                images: ['https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&w=400&q=80'],
+              }
+            ]).map((prod) => (
+              <div
+                key={prod._id}
+                onClick={() => navigate(`/product/${prod._id}`)}
+                className="bg-white border border-slate-200/90 rounded-2xl p-3 shadow-2xs hover:shadow-md transition-all flex items-center gap-3 cursor-pointer relative"
+              >
+                {/* Left: Square image */}
+                <div className="w-24 h-24 sm:w-28 sm:h-28 shrink-0 rounded-xl overflow-hidden relative bg-slate-100">
+                  <img
+                    src={prod.images?.[0] || 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=300&q=80'}
+                    alt={prod.title}
+                    className="w-full h-full object-cover"
+                  />
+                  {/* Tag pill */}
+                  <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-emerald-950/80 backdrop-blur-xs text-white text-[9px] font-black uppercase tracking-wider">
+                    {prod.isOrganic ? 'ORGANIC' : prod.badge || 'DIRECT LOT'}
+                  </span>
+                </div>
+
+                {/* Right: Info */}
+                <div className="flex-1 min-w-0 flex flex-col justify-between self-stretch py-0.5">
+                  <div>
+                    <div className="flex items-center gap-1.5 text-[10px] text-slate-500 font-semibold mb-0.5">
+                      <span>🏡 {prod.farmer?.name || 'Verified Farm'}</span>
+                      <span>•</span>
+                      <span className="text-emerald-700 font-bold">{prod.grade || 'Grade A+'}</span>
+                    </div>
+                    <h4 className="text-sm font-extrabold text-slate-900 truncate">
+                      {prod.title}
+                    </h4>
+                    <p className="text-[11px] text-slate-500 truncate mt-0.5 font-normal">
+                      {prod.description || 'Farm-fresh harvest direct to consumer'}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-between mt-2 pt-1 border-t border-slate-100">
+                    <div>
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-sm font-black text-slate-900">₹{prod.price}</span>
+                        <span className="text-[10px] text-slate-500 font-semibold">/{prod.unit || 'Kg'}</span>
+                      </div>
+                      {prod.originalPrice && (
+                        <span className="text-[10px] font-bold text-emerald-600">
+                          ({Math.round(((prod.originalPrice - prod.price) / prod.originalPrice) * 100)}% OFF)
+                        </span>
+                      )}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        addToCart(prod, 1);
+                      }}
+                      className="px-3 py-1.5 rounded-full bg-[#114b2b] hover:bg-[#0c3920] active:scale-95 text-white font-bold text-xs flex items-center gap-1 shadow-xs transition-transform"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Add Lot</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 6. Farmer Guarantee Banner */}
+        <div className="px-4 py-3">
+          <div className="rounded-2xl bg-gradient-to-r from-emerald-950 to-[#0b3c20] text-white p-4 flex items-center justify-between shadow-md border border-emerald-800">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-800/60 border border-emerald-600/40 flex items-center justify-center shrink-0">
+                <ShieldCheck className="w-6 h-6 text-emerald-400" />
+              </div>
+              <div>
+                <div className="text-xs font-bold text-white leading-tight">100% Quality Assurance</div>
+                <div className="text-[10px] text-emerald-200/80 leading-tight mt-0.5">Full refund if produce differs from inspection report</div>
+              </div>
+            </div>
+            <Link
+              to="/about"
+              className="px-3 py-1.5 rounded-full bg-amber-500 text-slate-950 font-bold text-[11px] shrink-0 hover:bg-amber-400 transition-colors"
+            >
+              Read
+            </Link>
+          </div>
+        </div>
+
+      </div>
+
+      {/* ====================== DESKTOP VIEW (md: and above - 100% untouched) ====================== */}
+      <div className="hidden md:block">
 
       {/* ====================== 1. FULL-WIDTH PREMIUM HERO ====================== */}
       <section className="relative overflow-hidden min-h-[520px]">
@@ -1160,6 +1529,7 @@ export default function Home() {
           </div>
         </section>
 
+      </div>
       </div>
 
       {/* ── Ticker Keyframe CSS ── */}

@@ -78,19 +78,37 @@ export default function Navbar() {
         <div className="max-w-7xl xl:max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20 gap-4">
 
           {/* Brand Logo */}
-          <Link to="/" className="flex items-center gap-2.5 shrink-0 group">
-            <div className="w-11 h-11 rounded-2xl bg-[#1B5E3A] flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
-              <Tractor className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-black text-2xl tracking-tight text-[#1B5E3A] font-sans leading-none block">
-                  KrishiDirect
-                </span>
+          <div className="flex flex-col shrink-0">
+            <Link to="/" className="flex items-center gap-2 group">
+              <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl bg-[#1B5E3A] flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                <Tractor className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
-              <p className="text-[10px] font-black text-[#F5A623] uppercase tracking-widest leading-none mt-1 block">FARM TO CONSUMER</p>
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-black text-xl sm:text-2xl tracking-tight text-[#1B5E3A] font-sans leading-none block">
+                    KrishiDirect
+                  </span>
+                  <span className="md:hidden bg-emerald-100 text-emerald-800 text-[9px] font-black px-1.5 py-0.5 rounded-sm tracking-wide">
+                    KISAN
+                  </span>
+                </div>
+                <p className="hidden sm:block text-[10px] font-black text-[#F5A623] uppercase tracking-widest leading-none mt-1">FARM TO CONSUMER</p>
+              </div>
+            </Link>
+
+            {/* Mobile Location Selector Under Brand Logo */}
+            <div className="md:hidden mt-1 pl-1">
+              <button
+                type="button"
+                onClick={() => setLocationDropdownOpen(!locationDropdownOpen)}
+                className="flex items-center gap-1 text-[11px] font-bold text-slate-700 hover:text-emerald-800 cursor-pointer"
+              >
+                <MapPin className="w-3 h-3 text-emerald-600 shrink-0" />
+                <span className="truncate max-w-[160px]">{selectedLocation.split(',')[0]}</span>
+                <ChevronDown className="w-3 h-3 text-slate-400" />
+              </button>
             </div>
-          </Link>
+          </div>
 
           {/* Location Delivery Selector (Pill) */}
           <div className="hidden lg:flex relative">
@@ -368,39 +386,45 @@ export default function Navbar() {
 
           </div>
 
-          {/* Mobile Search & Menu Toggle */}
-          <div className="md:hidden flex items-center gap-1">
-            <button
-              type="button"
-              onClick={() => {
-                setMobileSearchOpen(!mobileSearchOpen);
-                if (mobileMenuOpen) setMobileMenuOpen(false);
-              }}
-              className={`p-2 rounded-full transition-colors cursor-pointer ${
-                mobileSearchOpen ? 'bg-emerald-50 text-[#1B5E3A]' : 'text-slate-700 hover:text-emerald-800 hover:bg-slate-100'
-              }`}
-              aria-label="Toggle search bar"
+          {/* Mobile Action Icons Matching Stitch Design */}
+          <div className="md:hidden flex items-center gap-0.5">
+            <Link
+              to="/mandi-rates"
+              className="p-2 text-slate-700 hover:text-emerald-800 rounded-full hover:bg-slate-100 transition-colors"
+              title="Live Mandi Rates"
             >
-              <Search className="w-5 h-5" />
-            </button>
-            <Link to="/cart" className="p-2 relative text-slate-700 hover:text-emerald-800 rounded-full hover:bg-slate-100 transition-colors">
-              <ShoppingBag className="w-5 h-5" />
-              {cartCount > 0 && (
-                <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#1B5E3A] text-white text-[9px] font-black flex items-center justify-center shadow-xs">
+              <TrendingUp className="w-5 h-5 text-emerald-700" />
+            </Link>
+            <Link
+              to="/marketplace"
+              className="p-2 text-slate-700 hover:text-emerald-800 rounded-full hover:bg-slate-100 transition-colors"
+              title="Saved Wishlist"
+            >
+              <Heart className="w-5 h-5 text-slate-600" />
+            </Link>
+            <Link
+              to="/cart"
+              className="p-2 relative text-slate-700 hover:text-emerald-800 rounded-full hover:bg-slate-100 transition-colors"
+              title="Shopping Bag"
+            >
+              <ShoppingBag className="w-5 h-5 text-slate-800" />
+              {cartCount > 0 ? (
+                <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#e55a2b] text-white text-[9px] font-black flex items-center justify-center shadow-xs">
                   {cartCount}
+                </span>
+              ) : (
+                <span className="absolute top-1 right-1 w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-600 text-[8px] font-black flex items-center justify-center">
+                  0
                 </span>
               )}
             </Link>
             <button
               type="button"
-              onClick={() => {
-                setMobileMenuOpen(!mobileMenuOpen);
-                if (mobileSearchOpen) setMobileSearchOpen(false);
-              }}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 text-slate-800 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
               aria-label="Toggle menu"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
 
