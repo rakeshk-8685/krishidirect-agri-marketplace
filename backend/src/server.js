@@ -89,15 +89,17 @@ app.use('/api/farmers', farmerRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/reviews', reviewRoutes);
 
-// Health check endpoint
-app.get('/api/health', (req, res) => {
+// Health check endpoints
+const healthHandler = (req, res) => {
   res.json({
     status: 'OK',
     service: 'Agri Marketplace API Engine',
     timestamp: new Date(),
     environment: process.env.NODE_ENV || 'development'
   });
-});
+};
+app.get('/api/health', healthHandler);
+app.get('/health', healthHandler);
 
 // Centralized error handling
 app.use(errorHandler);

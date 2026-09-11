@@ -1,7 +1,18 @@
 const rawApiUrl = import.meta.env.VITE_API_URL;
-const formattedBase = rawApiUrl
-  ? (rawApiUrl.startsWith('http') ? rawApiUrl : `https://${rawApiUrl}`)
-  : '';
+
+let formattedBase = '';
+if (rawApiUrl && typeof rawApiUrl === 'string') {
+  const trimmed = rawApiUrl.trim();
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+    formattedBase = trimmed;
+  } else if (trimmed.includes('.')) {
+    formattedBase = `https://${trimmed}`;
+  } else if (trimmed.length > 0) {
+    // Internal Render service name like "krishidirect-api" -> append .onrender.com
+    formattedBase = `https://${trimmed}.onrender.com`;
+  }
+}
+
 const API_BASE_URL = formattedBase ? `${formattedBase.replace(/\/+$/, '')}/api` : '/api';
 
 const getHeaders = () => {
