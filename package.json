@@ -1,0 +1,13 @@
+{
+  "name": "agri-marketplace-root",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Production-grade Farmer-to-Consumer Agri Marketplace platform",
+  "scripts": {
+    "setup": "npm --prefix backend install && npm --prefix frontend install",
+    "start:backend": "npm --prefix backend start",
+    "start:frontend": "npm --prefix frontend dev",
+    "seed": "npm --prefix backend run seed",
+    "build": "npm --prefix frontend build"
+  }
+}
