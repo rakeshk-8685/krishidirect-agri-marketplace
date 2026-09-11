@@ -14,6 +14,7 @@ export default function Navbar() {
   const [locationDropdownOpen, setLocationDropdownOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const userDropdownRef = useRef(null);
 
   useEffect(() => {
@@ -367,18 +368,73 @@ export default function Navbar() {
 
           </div>
 
-          {/* Mobile menu toggle */}
-          <div className="md:hidden flex items-center gap-2">
-            <Link to="/cart" className="p-2 relative text-slate-700">
-              <ShoppingBag className="w-6 h-6" />
+          {/* Mobile Search & Menu Toggle */}
+          <div className="md:hidden flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => {
+                setMobileSearchOpen(!mobileSearchOpen);
+                if (mobileMenuOpen) setMobileMenuOpen(false);
+              }}
+              className={`p-2 rounded-full transition-colors cursor-pointer ${
+                mobileSearchOpen ? 'bg-emerald-50 text-[#1B5E3A]' : 'text-slate-700 hover:text-emerald-800 hover:bg-slate-100'
+              }`}
+              aria-label="Toggle search bar"
+            >
+              <Search className="w-5 h-5" />
+            </button>
+            <Link to="/cart" className="p-2 relative text-slate-700 hover:text-emerald-800 rounded-full hover:bg-slate-100 transition-colors">
+              <ShoppingBag className="w-5 h-5" />
+              {cartCount > 0 && (
+                <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#1B5E3A] text-white text-[9px] font-black flex items-center justify-center shadow-xs">
+                  {cartCount}
+                </span>
+              )}
             </Link>
-            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 text-slate-800">
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(!mobileMenuOpen);
+                if (mobileSearchOpen) setMobileSearchOpen(false);
+              }}
+              className="p-2 text-slate-800 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
+              aria-label="Toggle menu"
+            >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
 
         </div>
       </div>
+
+      {/* Mobile Expandable Search Bar */}
+      {mobileSearchOpen && (
+        <div className="md:hidden bg-white/98 backdrop-blur-md px-4 py-2.5 border-t border-slate-200 shadow-md">
+          <form
+            onSubmit={(e) => {
+              handleSearchSubmit(e);
+              setMobileSearchOpen(false);
+            }}
+            className="relative flex items-center"
+          >
+            <input
+              type="text"
+              autoFocus
+              placeholder="Search crops, fruits, vegetables..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-20 py-2 rounded-full border border-slate-300 bg-slate-50 text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:bg-white transition-all shadow-inner"
+            />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3" />
+            <button
+              type="submit"
+              className="absolute right-1 px-3.5 py-1.5 rounded-full bg-[#1B5E3A] hover:bg-[#14462B] text-white font-bold text-xs transition-colors shadow-xs cursor-pointer"
+            >
+              Search
+            </button>
+          </form>
+        </div>
+      )}
 
       {/* 3. Sub-Header Category Navigation Bar */}
       <div className="w-full bg-[#14462B] text-white text-xs font-semibold py-2.5 px-4 sm:px-6 lg:px-8 border-t border-[#0F3D24]">

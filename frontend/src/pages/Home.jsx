@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { apiCall } from '../services/api';
 import ProductCard from '../components/ProductCard';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { Tractor, Search, ArrowRight, ShieldCheck, HeartHandshake, Sparkles, Leaf, TrendingUp, CheckCircle, Truck, Award, QrCode, Star, ChevronRight, MapPin, ChevronDown, ChevronUp, BarChart2, Newspaper, PhoneCall } from 'lucide-react';
+import { Tractor, Search, ArrowRight, ShieldCheck, HeartHandshake, Sparkles, Leaf, TrendingUp, CheckCircle, Truck, Award, QrCode, Star, ChevronRight, MapPin, ChevronDown, ChevronUp, BarChart2, Newspaper, PhoneCall, X } from 'lucide-react';
 
 // Live mandi ticker items (scrolling)
 const TICKER_ITEMS = [
@@ -502,46 +502,97 @@ export default function Home() {
             <strong className="text-white">zero broker commissions</strong>.
           </p>
 
-          {/* ── Multi-Parameter Search Bar — with glow shadow ── */}
-          <form
-            onSubmit={handleSearchSubmit}
-            className="flex flex-col sm:flex-row items-stretch gap-0 bg-white rounded-full overflow-hidden max-w-2xl mx-auto"
-            style={{ boxShadow: '0 8px 40px rgba(0,0,0,0.45), 0 0 0 3px rgba(255,255,255,0.12), 0 0 60px rgba(16,185,129,0.18)' }}
-          >
-            {/* Crop Search */}
-            <div className="flex items-center flex-1 px-4 py-1 border-b sm:border-b-0 sm:border-r border-slate-200">
-              <Search className="w-4 h-4 text-slate-400 shrink-0" />
-              <input
-                type="text"
-                placeholder="Crop, spice, or variety..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 pl-3 pr-2 py-3 text-sm text-slate-900 font-medium focus:outline-none bg-transparent placeholder-slate-400"
-              />
-            </div>
-
-            {/* State Select */}
-            <div className="hidden sm:flex items-center gap-1.5 px-4 py-1 border-r border-slate-200 min-w-[150px]">
-              <MapPin className="w-4 h-4 text-emerald-600 shrink-0" />
-              <select
-                value={selectedState}
-                onChange={(e) => setSelectedState(e.target.value)}
-                className="flex-1 py-3 text-sm text-slate-700 font-medium focus:outline-none bg-transparent cursor-pointer"
-              >
-                {INDIA_STATES.map(s => <option key={s}>{s}</option>)}
-              </select>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            </div>
-
-            {/* Search CTA */}
-            <button
-              type="submit"
-              className="px-8 py-4 bg-[#e55a2b] hover:bg-[#d14d22] text-white font-extrabold text-sm sm:rounded-r-full transition-colors shadow-lg flex items-center justify-center gap-2"
+          {/* ── Multi-Parameter Search Bar — Pro Mobile App Ergonomics ── */}
+          <div className="max-w-2xl mx-auto w-full">
+            <form
+              onSubmit={handleSearchSubmit}
+              className="relative flex items-center bg-white/95 backdrop-blur-md rounded-full border border-white/70 shadow-[0_16px_40px_rgba(0,0,0,0.35),0_0_0_1px_rgba(255,255,255,0.25)] p-1.5 sm:p-2 transition-all duration-300 focus-within:ring-4 focus-within:ring-emerald-400/25 focus-within:border-emerald-500 focus-within:bg-white"
             >
-              <Search className="w-4 h-4" />
-              Search
-            </button>
-          </form>
+              {/* Crop Search Icon & Input */}
+              <div className="flex items-center flex-1 min-w-0 pl-1.5 sm:pl-2">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-emerald-50 text-[#1B5E3A] flex items-center justify-center shrink-0 shadow-2xs">
+                  <Search className="w-4 h-4 text-[#1B5E3A]" />
+                </div>
+                <input
+                  type="text"
+                  placeholder="Search crop, spice, or variety..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-2 sm:pl-3 pr-1 py-2 text-xs sm:text-sm text-slate-900 font-semibold focus:outline-none bg-transparent placeholder-slate-400 truncate"
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery('')}
+                    className="p-1 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors mr-1 shrink-0 cursor-pointer"
+                    aria-label="Clear search query"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+
+              {/* State Select (Desktop & Tablet) */}
+              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 border-l border-slate-200 min-w-[145px]">
+                <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <select
+                  value={selectedState}
+                  onChange={(e) => setSelectedState(e.target.value)}
+                  className="flex-1 py-1.5 text-xs font-bold text-slate-700 focus:outline-none bg-transparent cursor-pointer"
+                >
+                  {INDIA_STATES.map(s => <option key={s} value={s}>{s}</option>)}
+                </select>
+                <ChevronDown className="w-3 h-3 text-slate-400 shrink-0" />
+              </div>
+
+              {/* Search CTA (Tactile Pill Button) */}
+              <button
+                type="submit"
+                className="shrink-0 px-4 sm:px-6 py-2 sm:py-2.5 bg-gradient-to-r from-[#e55a2b] via-[#ea580c] to-[#d14d22] hover:from-[#d14d22] hover:to-[#b83d16] text-white font-extrabold text-xs sm:text-sm rounded-full shadow-[0_4px_14px_rgba(229,90,43,0.45)] hover:shadow-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+              >
+                <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span>Search</span>
+              </button>
+            </form>
+
+            {/* Mobile State Selector & Popular Quick-Filter Chips */}
+            <div className="mt-3 flex items-center gap-2 overflow-x-auto no-scrollbar py-1 px-1 text-left">
+              {/* Mobile State Filter Chip */}
+              <div className="sm:hidden shrink-0 flex items-center">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white text-[11px] font-bold shadow-xs">
+                  <MapPin className="w-3 h-3 text-emerald-300 shrink-0" />
+                  <select
+                    value={selectedState}
+                    onChange={(e) => setSelectedState(e.target.value)}
+                    className="bg-transparent text-white text-[11px] font-bold focus:outline-none cursor-pointer pr-1"
+                    style={{ colorScheme: 'dark' }}
+                  >
+                    {INDIA_STATES.map(s => (
+                      <option key={s} value={s} className="bg-slate-900 text-white font-normal">
+                        {s}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Popular Tags */}
+              <span className="text-[10px] uppercase font-extrabold tracking-wider text-emerald-200/90 shrink-0">Popular:</span>
+              {['Alphonso Mango', 'Desi Tomato', 'Nashik Onion', 'Sharbati Wheat', 'Mustard Oil'].map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery(tag);
+                    navigate(`/marketplace?search=${encodeURIComponent(tag)}`);
+                  }}
+                  className="shrink-0 px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/25 active:scale-95 backdrop-blur-md border border-white/20 text-white/95 hover:text-white text-[11px] font-medium transition-all cursor-pointer"
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          </div>
 
           {/* Trust Badge Glassmorphism Pills */}
           <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
