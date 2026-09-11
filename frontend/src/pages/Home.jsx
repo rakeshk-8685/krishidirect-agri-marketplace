@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { apiCall } from '../services/api';
 import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
+import { useAuth } from '../context/AuthContext';
 import ProductCard from '../components/ProductCard';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { Tractor, Search, ArrowRight, ShieldCheck, HeartHandshake, Sparkles, Leaf, TrendingUp, CheckCircle, Truck, Award, QrCode, Star, ChevronRight, MapPin, ChevronDown, ChevronUp, BarChart2, Newspaper, PhoneCall, X, Carrot, Apple, Milk, Wheat, Sprout, Landmark, Radio, Plus, Heart, ShoppingBag } from 'lucide-react';
@@ -54,6 +56,8 @@ export default function Home() {
   const navigate = useNavigate();
   const tickerRef = useRef(null);
   const { addToCart } = useCart();
+  const { isWishlisted, toggleWishlist } = useWishlist();
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -662,6 +666,23 @@ export default function Home() {
                   <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-emerald-950/80 backdrop-blur-xs text-white text-[9px] font-black uppercase tracking-wider">
                     {prod.isOrganic ? 'ORGANIC' : prod.badge || 'DIRECT LOT'}
                   </span>
+                  {/* Wishlist Heart Icon */}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleWishlist(prod);
+                    }}
+                    className={`absolute top-1.5 right-1.5 p-1.5 rounded-full backdrop-blur-xs transition-all cursor-pointer ${
+                      isWishlisted(prod._id)
+                        ? 'bg-rose-500 text-white shadow-xs'
+                        : 'bg-black/35 hover:bg-black/55 text-white'
+                    }`}
+                    title={isWishlisted(prod._id) ? 'Remove from Wishlist' : 'Save to Wishlist'}
+                    aria-label="Wishlist"
+                  >
+                    <Heart className={`w-3.5 h-3.5 ${isWishlisted(prod._id) ? 'fill-white text-white' : ''}`} />
+                  </button>
                 </div>
 
                 {/* Right: Info */}
@@ -693,17 +714,30 @@ export default function Home() {
                       )}
                     </div>
 
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        addToCart(prod, 1);
-                      }}
-                      className="px-3 py-1.5 rounded-full bg-[#114b2b] hover:bg-[#0c3920] active:scale-95 text-white font-bold text-xs flex items-center gap-1 shadow-xs transition-transform"
-                    >
-                      <Plus className="w-3.5 h-3.5" />
-                      <span>Add Lot</span>
-                    </button>
+                    {user ? (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addToCart(prod, 1);
+                        }}
+                        className="px-3 py-1.5 rounded-full bg-[#114b2b] hover:bg-[#0c3920] active:scale-95 text-white font-bold text-xs flex items-center gap-1 shadow-xs transition-transform cursor-pointer"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>Add Lot</span>
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate('/login?redirect=/');
+                        }}
+                        className="px-3 py-1.5 rounded-full bg-slate-900 hover:bg-slate-800 active:scale-95 text-white font-bold text-[11px] flex items-center gap-1 shadow-xs transition-transform cursor-pointer"
+                      >
+                        <span>Sign In</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

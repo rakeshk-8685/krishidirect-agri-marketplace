@@ -1,26 +1,32 @@
 import React, { useState, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
+import { useAuth } from '../context/AuthContext';
 import { Leaf, MapPin, Heart, Star, ShoppingBag, Check, Calendar } from 'lucide-react';
 
 // memo: prevents re-render of every card when cart state changes in parent
 const ProductCard = memo(function ProductCard({ product }) {
   const { addToCart } = useCart();
+  const { isWishlisted, toggleWishlist } = useWishlist();
+  const { user } = useAuth();
   const [added, setAdded] = useState(false);
-  const [isWishlisted, setIsWishlisted] = useState(false);
+
+  const wishlisted = isWishlisted(product._id);
 
   const handleAdd = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    if (!user) return;
     addToCart(product, 1);
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
   };
 
-  const toggleWishlist = (e) => {
+  const handleWishlistClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsWishlisted(!isWishlisted);
+    toggleWishlist(product);
   };
 
   return (
@@ -41,14 +47,15 @@ const ProductCard = memo(function ProductCard({ product }) {
 
         {/* Wishlist Heart Icon */}
         <button
-          onClick={toggleWishlist}
+          type="button"
+          onClick={handleWishlistClick}
           className={`absolute top-3 right-3 p-2 rounded-full backdrop-blur-md transition-all shadow ${
-            isWishlisted ? 'bg-rose-500 text-white' : 'bg-white/80 text-slate-600 hover:text-rose-500'
+            wishlisted ? 'bg-rose-500 text-white shadow-rose-200' : 'bg-white/85 text-slate-600 hover:text-rose-500 hover:bg-white'
           }`}
-          title="Save to Wishlist"
-          aria-label="Save to Wishlist"
+          title={wishlisted ? 'Remove from Wishlist' : 'Save to Wishlist'}
+          aria-label={wishlisted ? 'Remove from Wishlist' : 'Save to Wishlist'}
         >
-          <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-white' : ''}`} />
+          <Heart className={`w-4 h-4 ${wishlisted ? 'fill-white text-white' : ''}`} />
         </button>
 
         {/* Badges Overlay */}
@@ -134,30 +141,41 @@ const ProductCard = memo(function ProductCard({ product }) {
           </div>
         </div>
 
-        {/* Add to Basket Button */}
-        <button
-          onClick={handleAdd}
-          disabled={product.availableQuantity <= 0}
-          className={`w-full py-2.5 rounded-xl text-xs font-bold shadow-sm flex items-center justify-center gap-2 transition-all duration-200 mt-auto ${
-            added 
-              ? 'bg-emerald-800 text-white'
-              : product.availableQuantity <= 0
-              ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
-              : 'bg-emerald-900 hover:bg-emerald-950 text-white hover:scale-[1.01] active:scale-[0.99]'
-          }`}
-        >
-          {added ? (
-            <>
-              <Check className="w-4 h-4" />
-              <span>Added to Basket</span>
-            </>
-          ) : (
-            <>
-              <ShoppingBag className="w-4 h-4 text-emerald-300" />
-              <span>{product.availableQuantity <= 0 ? 'Sold Out' : 'Add to Cart'}</span>
-            </>
-          )}
-        </button>
+        {/* Add to Basket Button — strictly for logged-in users */}
+        {user ? (
+          <button
+            onClick={handleAdd}
+            disabled={product.availableQuantity <= 0}
+            className={`w-full py-2.5 rounded-xl text-xs font-bold shadow-sm flex items-center justify-center gap-2 transition-all duration-200 mt-auto ${
+              added 
+                ? 'bg-emerald-800 text-white'
+                : product.availableQuantity <= 0
+                ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                : 'bg-emerald-900 hover:bg-emerald-950 text-white hover:scale-[1.01] active:scale-[0.99]'
+            }`}
+          >
+            {added ? (
+              <>
+                <Check className="w-4 h-4" />
+                <span>Added to Basket</span>
+              </>
+            ) : (
+              <>
+                <ShoppingBag className="w-4 h-4 text-emerald-300" />
+                <span>{product.availableQuantity <= 0 ? 'Sold Out' : 'Add to Cart'}</span>
+              </>
+            )}
+          </button>
+        ) : (
+          <Link
+            to="/login?redirect=/marketplace"
+            onClick={(e) => e.stopPropagation()}
+            className="w-full py-2.5 rounded-xl text-xs font-bold shadow-sm flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white transition-all duration-200 mt-auto"
+          >
+            <ShoppingBag className="w-3.5 h-3.5 text-slate-400" />
+            <span>Sign In to Buy</span>
+          </Link>
+        )}
 
       </div>
 

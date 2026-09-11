@@ -2,11 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
 import { Tractor, ShoppingBag, Heart, User, LogOut, Search, MapPin, ChevronDown, ShieldCheck, Sprout, Menu, X, TrendingUp, Newspaper, LayoutDashboard, Leaf, Star, Store } from 'lucide-react';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const { cartCount } = useCart();
+  const { wishlistCount } = useWishlist();
   const navigate = useNavigate();
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -199,12 +201,17 @@ export default function Navbar() {
 
             {/* Wishlist Icon */}
             <Link
-              to="/marketplace"
-              className="p-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
+              to="/wishlist"
+              className="p-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors relative"
               title="Saved Wishlist"
               aria-label="View Saved Wishlist"
             >
               <Heart className="w-5 h-5 text-slate-600" />
+              {wishlistCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-rose-500 text-white font-extrabold text-[10px] w-4 h-4 rounded-full flex items-center justify-center shadow">
+                  {wishlistCount}
+                </span>
+              )}
             </Link>
 
             {/* Cart Icon */}
@@ -396,11 +403,16 @@ export default function Navbar() {
               <TrendingUp className="w-5 h-5 text-emerald-700" />
             </Link>
             <Link
-              to="/marketplace"
-              className="p-2 text-slate-700 hover:text-emerald-800 rounded-full hover:bg-slate-100 transition-colors"
+              to="/wishlist"
+              className="p-2 relative text-slate-700 hover:text-emerald-800 rounded-full hover:bg-slate-100 transition-colors"
               title="Saved Wishlist"
             >
               <Heart className="w-5 h-5 text-slate-600" />
+              {wishlistCount > 0 && (
+                <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] font-black flex items-center justify-center shadow-xs">
+                  {wishlistCount}
+                </span>
+              )}
             </Link>
             <Link
               to="/cart"
@@ -525,6 +537,14 @@ export default function Navbar() {
 
           <Link to="/marketplace" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-semibold">
             Produce Marketplace
+          </Link>
+          <Link to="/wishlist" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-between py-2 text-sm font-semibold">
+            <span>❤️ Saved Wishlist</span>
+            {wishlistCount > 0 && (
+              <span className="px-2 py-0.5 rounded-full bg-rose-500 text-white text-[11px] font-bold">
+                {wishlistCount}
+              </span>
+            )}
           </Link>
           <Link to="/farmers" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-semibold">
             Verified Farms

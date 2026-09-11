@@ -2,14 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { apiCall } from '../services/api';
 import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { Tractor, Calendar, MapPin, Leaf, Star, ShieldCheck, Minus, Plus, ShoppingBag, ArrowLeft, MessageSquare, CheckCircle2, AlertCircle, Phone, ChevronRight, Home, MessageCircle, Edit3, Lock } from 'lucide-react';
+import { Tractor, Calendar, MapPin, Leaf, Star, ShieldCheck, Minus, Plus, ShoppingBag, ArrowLeft, MessageSquare, CheckCircle2, AlertCircle, Phone, ChevronRight, Home, MessageCircle, Edit3, Lock, Heart } from 'lucide-react';
 
 export default function ProductDetail() {
   const { id } = useParams();
   const { addToCart } = useCart();
+  const { isWishlisted, toggleWishlist } = useWishlist();
   const { user } = useAuth();
   const { showToast } = useNotification();
 
@@ -242,9 +244,25 @@ export default function ProductDetail() {
               </span>
             </div>
 
-            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
-              {product.title}
-            </h1>
+            <div className="flex items-start justify-between gap-4">
+              <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                {product.title}
+              </h1>
+              <button
+                type="button"
+                onClick={() => toggleWishlist(product)}
+                className={`p-3 rounded-2xl border transition-all shadow-xs shrink-0 flex items-center gap-1.5 text-xs font-bold cursor-pointer ${
+                  isWishlisted(product._id)
+                    ? 'bg-rose-50 border-rose-200 text-rose-600'
+                    : 'bg-white border-slate-200 text-slate-600 hover:text-rose-600 hover:bg-rose-50/50'
+                }`}
+                title={isWishlisted(product._id) ? 'Remove from Wishlist' : 'Save to Wishlist'}
+                aria-label="Toggle Wishlist"
+              >
+                <Heart className={`w-5 h-5 ${isWishlisted(product._id) ? 'fill-rose-600 text-rose-600' : ''}`} />
+                <span className="hidden sm:inline">{isWishlisted(product._id) ? 'Wishlisted' : 'Save'}</span>
+              </button>
+            </div>
 
             <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500">
               <span className="flex items-center gap-1 font-extrabold text-slate-900 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200">
@@ -327,18 +345,28 @@ export default function ProductDetail() {
               </span>
             </div>
 
-            <button
-              onClick={handleAddToCart}
-              disabled={product.availableQuantity <= 0}
-              className={`w-full py-4 rounded-2xl font-extrabold text-sm shadow-xl flex items-center justify-center gap-2 transition-transform hover:-translate-y-0.5 active:translate-y-0 ${
-                product.availableQuantity <= 0 
-                  ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
-                  : 'bg-emerald-600 hover:bg-emerald-700 text-white'
-              }`}
-            >
-              <ShoppingBag className="w-5 h-5" />
-              <span>{product.availableQuantity <= 0 ? 'Out of Stock' : `Add ${quantity} ${product.unit} to Basket • ₹${product.price * quantity}`}</span>
-            </button>
+            {user ? (
+              <button
+                onClick={handleAddToCart}
+                disabled={product.availableQuantity <= 0}
+                className={`w-full py-4 rounded-2xl font-extrabold text-sm shadow-xl flex items-center justify-center gap-2 transition-transform hover:-translate-y-0.5 active:translate-y-0 ${
+                  product.availableQuantity <= 0 
+                    ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                    : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                }`}
+              >
+                <ShoppingBag className="w-5 h-5" />
+                <span>{product.availableQuantity <= 0 ? 'Out of Stock' : `Add ${quantity} ${product.unit} to Basket • ₹${product.price * quantity}`}</span>
+              </button>
+            ) : (
+              <Link
+                to={`/login?redirect=/products/${product._id}`}
+                className="w-full py-4 rounded-2xl font-extrabold text-sm shadow-xl flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white transition-transform hover:-translate-y-0.5 text-center"
+              >
+                <ShoppingBag className="w-5 h-5 text-slate-400" />
+                <span>Sign In to Buy • ₹{product.price * quantity}</span>
+              </Link>
+            )}
 
             {/* Direct Contact Buttons — Call Farmer & WhatsApp */}
             <div className="grid grid-cols-2 gap-3">

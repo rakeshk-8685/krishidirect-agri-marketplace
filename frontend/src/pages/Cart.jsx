@@ -1,16 +1,31 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import EmptyState from '../components/EmptyState';
 import { ShoppingBag, Trash2, Plus, Minus, ArrowRight, ShieldCheck, ArrowLeft, Tractor } from 'lucide-react';
 
 export default function Cart() {
   const { cartItems, updateQuantity, removeFromCart, clearCart, cartSubtotal } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const deliveryFee = cartSubtotal > 1000 || cartSubtotal === 0 ? 0 : 50;
   const platformFee = cartSubtotal > 0 ? 15 : 0;
   const totalAmount = cartSubtotal + deliveryFee + platformFee;
+
+  if (!user) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-16">
+        <EmptyState 
+          title="Sign In to View Your Cart"
+          description="Your shopping cart is private and linked to your account. Please sign in to view your items, update quantities, and proceed to checkout."
+          actionLabel="Sign In to Continue"
+          actionPath="/login?redirect=/cart"
+        />
+      </div>
+    );
+  }
 
   if (cartItems.length === 0) {
     return (

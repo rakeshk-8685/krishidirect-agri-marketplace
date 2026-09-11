@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { NotificationProvider } from './context/NotificationContext';
+import { WishlistProvider } from './context/WishlistContext';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -23,6 +24,7 @@ const Marketplace    = lazy(() => import('./pages/Marketplace'));
 const ProductDetail  = lazy(() => import('./pages/ProductDetail'));
 const VerifiedFarms  = lazy(() => import('./pages/VerifiedFarms'));
 const FarmerProfile  = lazy(() => import('./pages/FarmerProfile'));
+const Wishlist       = lazy(() => import('./pages/Wishlist'));
 const Cart           = lazy(() => import('./pages/Cart'));
 const Checkout       = lazy(() => import('./pages/Checkout'));
 const Orders         = lazy(() => import('./pages/Orders'));
@@ -63,6 +65,7 @@ function AppContent() {
             <Route path="/farmers" element={<VerifiedFarms />} />
             <Route path="/farmers/:id" element={<FarmerProfile />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/mandi-rates" element={<MandiRates />} />
             <Route path="/agri-news" element={<AgriNews />} />
 
@@ -142,9 +145,11 @@ export default function App() {
     <NotificationProvider>
       <AuthProvider>
         <CartProvider>
-          <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-            <AppContent />
-          </Router>
+          <WishlistProvider>
+            <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+              <AppContent />
+            </Router>
+          </WishlistProvider>
         </CartProvider>
       </AuthProvider>
     </NotificationProvider>
