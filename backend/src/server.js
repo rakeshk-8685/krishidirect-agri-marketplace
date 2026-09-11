@@ -98,7 +98,11 @@ app.use(errorHandler);
 
 // Start Server & DB
 const startServer = async () => {
-  await connectDB();
+  const isConnected = await connectDB();
+  if (isConnected) {
+    const dataService = require('./services/dataService');
+    await dataService.syncToMongo();
+  }
   app.listen(PORT, () => {
     console.log(`=======================================================`);
     console.log(`🌾 KrishiDirect Agri Marketplace API Server Running`);

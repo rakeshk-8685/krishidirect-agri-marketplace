@@ -673,11 +673,15 @@ const initMemoryState = async () => {
   memoryReviews = [...initialReviews];
   isInitialized = true;
   console.log(`[DataService] Seed dataset initialized with ${memoryUsers.length} Users, ${memoryProducts.length} Products, and Active Orders.`);
+};
 
-  // Sync to Mongo if connected
+const syncToMongo = async (force = false) => {
   try {
-    if (getMongoStatus()) {
-      console.log('[DataService] Synchronizing seed dataset into MongoDB...');
+    if (!getMongoStatus()) return;
+    if (!isInitialized) await initMemoryState();
+    const productCount = await Product.countDocuments();
+    if (productCount === 0 || force) {
+      console.log('[DataService] Synchronizing seed dataset into MongoDB Atlas...');
       await User.deleteMany({});
       await Product.deleteMany({});
       await Order.deleteMany({});
@@ -687,10 +691,10 @@ const initMemoryState = async () => {
       await Product.insertMany(memoryProducts);
       await Order.insertMany(memoryOrders);
       await Review.insertMany(memoryReviews);
-      console.log('[DataService] MongoDB successfully synchronized!');
+      console.log(`[DataService] MongoDB Atlas successfully synchronized with ${memoryUsers.length} Users and ${memoryProducts.length} Products!`);
     }
   } catch (err) {
-    console.error('[DataService] Mongo auto-seed error:', err.message);
+    console.error('[DataService] Mongo sync error:', err.message);
   }
 };
 
@@ -1636,7 +1640,9 @@ const dataService = {
       },
       farmerLedger
     };
-  }
+  },
+
+  syncToMongo
 };
 
 module.exports = dataService;

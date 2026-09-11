@@ -4,8 +4,8 @@ const { connectDB } = require('../config/db');
 async function runSeed() {
   console.log('🌾 Starting KrishiDirect Data Seeder...');
   await connectDB();
-  // Requiring dataService will trigger initMemoryState with MongoDB connection status
   const dataService = require('../services/dataService');
+  await dataService.syncToMongo(true);
   console.log('✅ Seed process completed successfully.');
   process.exit(0);
 }
