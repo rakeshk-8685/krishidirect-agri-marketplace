@@ -208,39 +208,4 @@ npm run build
 
 ---
 
-## 🌐 Live Deployment on Render (Blueprint)
 
-This repository includes a native [`render.yaml`](file:///d:/Agri%20Marketplace/render.yaml) Blueprint that automatically provisions:
-1. **Backend Web Service (`krishidirect-api`)**: Node.js Express server connected to MongoDB Atlas with auto-generated JWT secrets and health monitoring.
-2. **Frontend Static Site (`krishidirect-web`)**: React + Vite SPA with URL rewrites (`/* -> /index.html`) and automatic environment binding to the backend API service.
-
-### Deploy Steps:
-1. Log into your [Render Dashboard](https://dashboard.render.com/).
-2. Click **New +** → **Blueprint**.
-3. Connect your GitHub repository: `rakeshk-8685/krishidirect-agri-marketplace`.
-4. Render will detect [`render.yaml`](file:///d:/Agri%20Marketplace/render.yaml) and automatically configure both services.
-5. Click **Apply** to launch both your frontend and backend live!
-
----
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome! Feel free to check the [Issues](https://github.com/rakeshk-8685/krishidirect-agri-marketplace/issues) page.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'feat: Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## 📜 License
-
-Distributed under the MIT License. See [LICENSE](file:///d:/Agri%20Marketplace/LICENSE) for more information.
-
----
-
-<p align="center">
-  Built with 💚 for Indian Farmers & Conscious Consumers.
-</p>
