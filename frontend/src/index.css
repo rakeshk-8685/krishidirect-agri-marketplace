@@ -44,3 +44,13 @@
     box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
   }
 }
+
+/* Scrolling APMC Mandi Ticker Animation */
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}

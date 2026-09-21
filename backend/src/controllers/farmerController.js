@@ -1,4 +1,5 @@
 const dataService = require('../services/dataService');
+const { normalizeStatus } = require('../utils/orderStateMachine');
 
 // Public farmer profile for consumers
 const getFarmerProfile = async (req, res) => {

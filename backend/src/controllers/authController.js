@@ -212,6 +212,9 @@ const googleAuth = async (req, res) => {
   }
 
   let user = await dataService.findUserByEmail(email);
+  if (user && user.role === 'admin') {
+    return res.status(403).json({ success: false, message: 'Admin accounts must authenticate using secure master password credentials.' });
+  }
   if (!user) {
     user = await dataService.createUser({
       name: name || email.split('@')[0],

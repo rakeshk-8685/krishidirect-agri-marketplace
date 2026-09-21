@@ -1,5 +1,6 @@
 const dataService = require('../services/dataService');
 const { canRolePerformTransition, normalizeStatus, ORDER_STATES } = require('../utils/orderStateMachine');
+const { sanitizeString } = require('../middleware/validation');
 
 const createOrder = async (req, res) => {
   const { items, deliveryAddress, paymentMethod, deliverySlot } = req.body;

@@ -1,4 +1,5 @@
 const dataService = require('../services/dataService');
+const { sanitizeString } = require('../middleware/validation');
 
 const createOrUpdateReview = async (req, res) => {
   const { productId, farmerId, rating, comment, targetType } = req.body;

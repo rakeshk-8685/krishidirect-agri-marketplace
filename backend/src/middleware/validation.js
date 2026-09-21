@@ -25,9 +25,9 @@ const validateRegister = (req, res, next) => {
     return res.status(400).json({ success: false, message: 'Valid email address is required.' });
   }
 
-  // Minimum 8 characters — stronger than default 6
-  if (!password || password.length < 8) {
-    return res.status(400).json({ success: false, message: 'Password must be at least 8 characters long.' });
+  // Minimum 6 characters (matches authController and frontend validation)
+  if (!password || password.length < 6) {
+    return res.status(400).json({ success: false, message: 'Password must be at least 6 characters long.' });
   }
 
   if (!phone || phone.toString().trim().length < 8) {

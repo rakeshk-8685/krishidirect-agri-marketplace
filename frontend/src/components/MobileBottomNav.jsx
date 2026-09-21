@@ -18,7 +18,7 @@ export default function MobileBottomNav() {
     { label: 'Home', icon: Home, to: '/' },
     { label: 'Mandi', icon: TrendingUp, to: '/mandi-rates' },
     { label: 'Explore', icon: Compass, to: '/marketplace' },
-    { label: 'Orders', icon: ShoppingBag, to: user ? '/orders' : '/cart', badge: cartCount },
+    { label: 'Cart', icon: ShoppingBag, to: '/cart', badge: cartCount },
     { label: 'Account', icon: User, to: accountLink }
   ];
 

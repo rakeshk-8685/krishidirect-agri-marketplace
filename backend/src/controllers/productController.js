@@ -1,4 +1,5 @@
 const dataService = require('../services/dataService');
+const { sanitizeString } = require('../middleware/validation');
 
 const getProducts = async (req, res) => {
   const { category, isOrganic, search, farmerId, status, sort, location, farmingMethod, limit, skip } = req.query;

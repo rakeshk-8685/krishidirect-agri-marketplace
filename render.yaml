@@ -15,7 +15,7 @@ services:
       - key: PORT
         value: 10000
       - key: MONGODB_URI
-        value: mongodb+srv://rakeshkr8685_db_user:EVcj5CVYH63K1SnS@cluster0.y6vzvyo.mongodb.net/agri_marketplace?retryWrites=true&w=majority
+        sync: false
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRES_IN

@@ -539,26 +539,15 @@ export default function Login() {
                     </span>
                   </div>
 
-                  {/* Social Buttons in Same Row (Pills) */}
-                  <div className="grid grid-cols-2 gap-2 pt-0.5">
-                    {/* Continue with Google */}
+                  {/* Social Authentication */}
+                  <div className="pt-0.5">
                     <button
                       type="button"
                       onClick={() => setGoogleModalOpen(true)}
-                      className="w-full py-2 px-3 rounded-full border border-white/90 bg-white/80 hover:bg-white backdrop-blur-md hover:border-slate-300 text-xs font-bold text-slate-700 shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                      className="w-full py-2.5 px-4 rounded-full border border-slate-200/90 bg-white/90 hover:bg-white backdrop-blur-md hover:border-slate-300 text-xs font-bold text-slate-700 shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-2.5 cursor-pointer active:scale-95"
                     >
                       <GoogleIcon />
-                      <span className="truncate">Google</span>
-                    </button>
-
-                    {/* Continue with Apple */}
-                    <button
-                      type="button"
-                      onClick={() => showToast('Apple authentication is available on Apple devices.', 'info')}
-                      className="w-full py-2 px-3 rounded-full border border-white/90 bg-white/80 hover:bg-white backdrop-blur-md hover:border-slate-300 text-xs font-bold text-slate-700 shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
-                    >
-                      <AppleIcon />
-                      <span className="truncate">Apple</span>
+                      <span className="truncate font-bold">Continue with Google</span>
                     </button>
                   </div>
 
@@ -740,26 +729,15 @@ export default function Login() {
                     </span>
                   </div>
 
-                  {/* Social Buttons in Same Row (Pills) */}
-                  <div className="grid grid-cols-2 gap-2 pt-0.5">
-                    {/* Continue with Google */}
+                  {/* Social Authentication */}
+                  <div className="pt-0.5">
                     <button
                       type="button"
                       onClick={() => setGoogleModalOpen(true)}
-                      className="w-full py-2 px-3 rounded-full border border-white/90 bg-white/80 hover:bg-white backdrop-blur-md text-xs font-bold text-slate-700 shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                      className="w-full py-2.5 px-4 rounded-full border border-slate-200/90 bg-white/90 hover:bg-white backdrop-blur-md hover:border-slate-300 text-xs font-bold text-slate-700 shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-2.5 cursor-pointer active:scale-95"
                     >
                       <GoogleIcon />
-                      <span className="truncate">Google</span>
-                    </button>
-
-                    {/* Continue with Apple */}
-                    <button
-                      type="button"
-                      onClick={() => showToast('Apple authentication is available on Apple devices.', 'info')}
-                      className="w-full py-2 px-3 rounded-full border border-white/90 bg-white/80 hover:bg-white backdrop-blur-md text-xs font-bold text-slate-700 shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
-                    >
-                      <AppleIcon />
-                      <span className="truncate">Apple</span>
+                      <span className="truncate font-bold">Sign up with Google</span>
                     </button>
                   </div>
 

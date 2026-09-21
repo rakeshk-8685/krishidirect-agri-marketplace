@@ -1,17 +1,22 @@
 const dataService = require('../services/dataService');
 
 const getAdminDashboard = async (req, res) => {
-  // Fetch metrics and only recent slices — do NOT load all orders/products
-  const [metrics, pendingFarmers, recentOrders, commission] = await Promise.all([
+  const [metrics, farmers, products, users, pendingFarmers, recentOrders, commission] = await Promise.all([
     dataService.getAdminMetrics(),
+    dataService.getAllFarmers(),
+    dataService.getProducts({ limit: 100 }),
+    dataService.getAllUsers(),
     dataService.getAllFarmers({ verificationStatus: 'pending' }),
-    dataService.getOrders({ limit: 20 }),  // Last 20 orders only
+    dataService.getOrders({ limit: 50 }),
     Promise.resolve(dataService.getCommissionConfig())
   ]);
 
   res.json({
     success: true,
     metrics,
+    farmers,
+    products,
+    users,
     pendingFarmers,
     commission,
     recentOrders
