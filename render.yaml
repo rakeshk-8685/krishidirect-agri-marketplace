@@ -38,6 +38,12 @@ services:
     staticPublishPath: ./frontend/dist
     routes:
       - type: rewrite
+        source: /api-docs*
+        destination: https://krishidirect-api.onrender.com/api-docs*
+      - type: rewrite
+        source: /docs*
+        destination: https://krishidirect-api.onrender.com/api-docs*
+      - type: rewrite
         source: /api/*
         destination: https://krishidirect-api.onrender.com/api/*
       - type: rewrite

@@ -75,6 +75,13 @@ app.use(express.urlencoded({ extended: false, limit: '10kb' }));
 
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 
+// ─── Root & Convenience Redirects ────────────────────────────────────────────
+app.get('/', (req, res) => res.redirect('/api-docs/'));
+app.get('/api', (req, res) => res.redirect('/api-docs/'));
+app.get('/docs', (req, res) => res.redirect('/api-docs/'));
+app.get('/swagger', (req, res) => res.redirect('/api-docs/'));
+app.get('/favicon.ico', (req, res) => res.status(204).end());
+
 // ─── Swagger / OpenAPI Documentation ─────────────────────────────────────────
 const swaggerSpec = getSwaggerSpec(PORT);
 
@@ -90,13 +97,17 @@ const swaggerUiOptions = {
   }
 };
 
+app.get('/api-docs', (req, res) => res.redirect('/api-docs/'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerUiOptions));
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerUiOptions));
 app.get('/api-docs.json', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.send(swaggerSpec);
 });
-app.get('/docs', (req, res) => res.redirect('/api-docs'));
-app.get('/swagger', (req, res) => res.redirect('/api-docs'));
+app.get('/api/docs.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
 
 // ─── Global Rate Limiter ─────────────────────────────────────────────────────
 // 200 requests per 15 minutes per IP across all routes
