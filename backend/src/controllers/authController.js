@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const dataService = require('../services/dataService');
 const { JWT_SECRET, JWT_EXPIRES_IN } = require('../config/secrets');
+const { sanitizeString } = require('../middleware/validation');
+
 
 const register = async (req, res) => {
   const { name, email, password, confirmPassword, phone, role, farmDetails, addresses } = req.body;

@@ -7,6 +7,8 @@ require('dotenv').config();
 const { connectDB } = require('./config/db');
 const { errorHandler } = require('./middleware/errorHandler');
 const { rateLimiter } = require('./middleware/rateLimiter');
+const swaggerUi = require('swagger-ui-express');
+const { getSwaggerSpec } = require('./config/swagger');
 
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
@@ -73,6 +75,29 @@ app.use(express.urlencoded({ extended: false, limit: '10kb' }));
 
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 
+// ─── Swagger / OpenAPI Documentation ─────────────────────────────────────────
+const swaggerSpec = getSwaggerSpec(PORT);
+
+const swaggerUiOptions = {
+  explorer: true,
+  customSiteTitle: 'KrishiDirect API Documentation',
+  swaggerOptions: {
+    persistAuthorization: true,
+    filter: true,
+    displayRequestDuration: true,
+    docExpansion: 'list',
+    defaultModelsExpandDepth: 1
+  }
+};
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerUiOptions));
+app.get('/api-docs.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
+app.get('/docs', (req, res) => res.redirect('/api-docs'));
+app.get('/swagger', (req, res) => res.redirect('/api-docs'));
+
 // ─── Global Rate Limiter ─────────────────────────────────────────────────────
 // 200 requests per 15 minutes per IP across all routes
 app.use(rateLimiter({ windowMs: 15 * 60 * 1000, maxRequests: 200 }));
@@ -112,9 +137,12 @@ const startServer = async () => {
     await dataService.syncToMongo();
   }
   app.listen(PORT, () => {
+    const liveDocsUrl = process.env.API_BASE_URL || process.env.RENDER_EXTERNAL_URL || 'https://krishidirect-api.onrender.com';
     console.log(`=======================================================`);
     console.log(`🌾 KrishiDirect Agri Marketplace API Server Running`);
     console.log(`📡 URL: http://localhost:${PORT}`);
+    console.log(`📖 Local Swagger Docs: http://localhost:${PORT}/api-docs`);
+    console.log(`🌐 Live Swagger Docs:  ${liveDocsUrl}/api-docs`);
     console.log(`🛡️  CORS origins: ${allowedOrigins.join(', ')}`);
     console.log(`=======================================================`);
   });
